@@ -7,6 +7,10 @@ Public Class Form1
     Private Sub Form1_Load_1(sender As Object, e As EventArgs) Handles MyBase.Load
         'TODO: This line of code loads data into the '_ALSYS_DatabaseDataSet.Database' table. You can move, or remove it, as needed.
         Me.DatabaseTableAdapter.Fill(Me._ALSYS_DatabaseDataSet.Database)
+        'TODO: This line of code loads data into the '_ALSYS_DatabaseDataSet.Database' table. You can move, or remove it, as needed.
+        Me.DatabaseTableAdapter.Fill(Me._ALSYS_DatabaseDataSet.Database)
+        'TODO: This line of code loads data into the '_ALSYS_DatabaseDataSet.Database' table. You can move, or remove it, as needed.
+        Me.DatabaseTableAdapter.Fill(Me._ALSYS_DatabaseDataSet.Database)
         Timer1.Enabled = True
 
     End Sub
@@ -16,28 +20,31 @@ Public Class Form1
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If DatabaseBindingSource.Current() Is Nothing Then
+            MessageBox.Show("There is nothing to save.")
+        Else
+            On Error GoTo SaveErr
+            DatabaseBindingSource.EndEdit()
+            TextBox28.Text = DateTime.Now.ToString()
+            DatabaseTableAdapter.Update(_ALSYS_DatabaseDataSet.Database)
+            MessageBox.Show("Data Saved Succesfully at" & " " & DateTime.Now)
 
-        On Error GoTo SaveErr
-        DatabaseBindingSource.EndEdit()
-        DatabaseTableAdapter.Update(_ALSYS_DatabaseDataSet.Database)
-        MessageBox.Show("Data Saved Succesfully")
-
+        End If
 SaveErr:
         Exit Sub
 
     End Sub
 
-    Private Sub SearchToolStripButton_Click(sender As Object, e As EventArgs) Handles SearchToolStripButton.Click
-        Try
-            Me.DatabaseTableAdapter.Search(Me._ALSYS_DatabaseDataSet.Database, Last_NameToolStripTextBox.Text)
-        Catch ex As System.Exception
-            System.Windows.Forms.MessageBox.Show(ex.Message)
-        End Try
 
-    End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        DatabaseBindingSource.RemoveCurrent()
+        If DatabaseBindingSource.Current Is Nothing Then
+            MessageBox.Show("There is nothing more to remove")
+        Else
+            DatabaseBindingSource.RemoveCurrent()
+        End If
+
+
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
@@ -53,10 +60,11 @@ SaveErr:
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
         Dim Openfiledialog1 As New OpenFileDialog
         On Error GoTo Err
-        OpenFileDialog1.ShowDialog()
-        TextBox27.Text = OpenFileDialog1.FileName
+        Openfiledialog1.ShowDialog()
+        TextBox27.Text = Openfiledialog1.FileName
 
 Err:
         Exit Sub
@@ -79,11 +87,91 @@ Err:
         TextBox27.Text = ""
     End Sub
 
-    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
-        DatabaseTableAdapter.Search(_ALSYS_DatabaseDataSet.Database, TextBox1.Text)
-    End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Label42.Text = Date.Now.ToString("MM-dd-yyyy  hh:mm:ss")
         Label37.Text = Date.Now.ToString("yyyy")
     End Sub
+
+
+
+    Private Sub TextBox28_TextChanged(sender As Object, e As EventArgs) Handles TextBox28.TextChanged
+        TextBox28.Text = Label42.Text
+    End Sub
+
+    Private Sub Last_Name_SearchToolStripButton_Click(sender As Object, e As EventArgs) Handles Last_Name_SearchToolStripButton.Click
+        Try
+            Me.DatabaseTableAdapter.Last_Name_Search(Me._ALSYS_DatabaseDataSet.Database, Last_NameToolStripTextBox.Text)
+        Catch ex As System.Exception
+            System.Windows.Forms.MessageBox.Show(ex.Message)
+        End Try
+
+    End Sub
+
+    Private Sub ToolStripButton1_Click_1(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        Form3.Show()
+    End Sub
+
+    Private Sub ToolStripButton2_Click_1(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        Me.Hide()
+        Form2.Show()
+    End Sub
+
+    Private Sub TextBox19_TextChanged(sender As Object, e As EventArgs) Handles TextBox19.TextChanged
+        If String.Equals(TextBox19.Text, "Processing", StringComparison.OrdinalIgnoreCase) Then
+            TextBox19.BackColor = Color.Aqua
+            TextBox19.Text = TextBox19.Text.ToUpper()
+        ElseIf String.Equals(TextBox19.Text, "Printing", StringComparison.OrdinalIgnoreCase) Then
+            TextBox19.BackColor = Color.Yellow
+            TextBox19.Text = TextBox19.Text.ToUpper()
+        ElseIf String.Equals(TextBox19.Text, "Released", StringComparison.OrdinalIgnoreCase) Then
+            TextBox19.BackColor = Color.LightGreen
+            TextBox19.Text = TextBox19.Text.ToUpper()
+        Else
+            TextBox19.BackColor = Color.DarkSlateGray
+        End If
+    End Sub
+
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        If RadioButton3.Checked Then
+            TextBox19.Text = "Released"
+        End If
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        If RadioButton1.Checked Then
+            TextBox19.Text = "Processing"
+        End If
+    End Sub
+
+    Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
+        If RadioButton2.Checked Then
+            TextBox19.Text = "Printing"
+        End If
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        SetBlankTextBoxesToNA(Me)
+    End Sub
+
+    Private Sub SetBlankTextBoxesToNA(container As Control)
+        For Each control As Control In container.Controls
+            If TypeOf control Is TextBox Then
+                Dim textBox As TextBox = DirectCast(control, TextBox)
+                If textBox IsNot TextBox27 AndAlso String.IsNullOrEmpty(textBox.Text) Then
+                    textBox.Text = "N/A"
+                End If
+            ElseIf control.HasChildren Then
+                SetBlankTextBoxesToNA(control)
+            End If
+        Next
+    End Sub
+
+    Private Sub Last_NameToolStripLabel_Click(sender As Object, e As EventArgs) Handles Last_NameToolStripLabel.Click
+
+    End Sub
+
+    Private Sub TextBox35_TextChanged(sender As Object, e As EventArgs) Handles TextBox35.TextChanged
+        TextBox35.Text = DateTime.Now.ToString("MM/dd/yyyy")
+    End Sub
+End Class
