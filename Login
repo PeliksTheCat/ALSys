@@ -1,0 +1,27 @@
+Public Class Form2
+    Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If TextBox1.Text = "user" And TextBox2.Text = "admin" Then
+            MsgBox("Login Successful")
+            Form1.Show()
+
+            TextBox1.Text = ""
+            TextBox2.Text = ""
+            Me.Hide()
+
+        Else
+            MsgBox("Incorrect Username or Password")
+
+        End If
+
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Application.Exit()
+    End Sub
+
+
+End Class
