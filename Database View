@@ -1,0 +1,36 @@
+Public Class Form3
+    Private Sub Form3_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'TODO: This line of code loads data into the '_ALSYS_DatabaseDataSet1.Database' table. You can move, or remove it, as needed.
+        Me.DatabaseTableAdapter1.Fill(Me._ALSYS_DatabaseDataSet1.Database)
+
+    End Sub
+
+    Private Sub Last_Name_SearchToolStripButton_Click(sender As Object, e As EventArgs) Handles Last_Name_SearchToolStripButton.Click
+        Try
+            Me.DatabaseTableAdapter1.Last_Name_Search(Me._ALSYS_DatabaseDataSet1.Database, Last_NameToolStripTextBox.Text)
+        Catch ex As System.Exception
+            System.Windows.Forms.MessageBox.Show(ex.Message)
+        End Try
+
+    End Sub
+
+    Private Sub First_Name_SearchToolStripButton_Click(sender As Object, e As EventArgs) Handles First_Name_SearchToolStripButton.Click
+        Try
+            Me.DatabaseTableAdapter1.First_Name_Search(Me._ALSYS_DatabaseDataSet1.Database, First_NameToolStripTextBox.Text)
+        Catch ex As System.Exception
+            System.Windows.Forms.MessageBox.Show(ex.Message)
+        End Try
+
+    End Sub
+
+    Private Sub ADP_Number_SearchToolStripButton_Click(sender As Object, e As EventArgs) Handles ADP_Number_SearchToolStripButton.Click
+        Try
+            Me.DatabaseTableAdapter1.ADP_Number_Search(Me._ALSYS_DatabaseDataSet1.Database, ADP_ID_NumberToolStripTextBox.Text)
+        Catch ex As System.Exception
+            System.Windows.Forms.MessageBox.Show(ex.Message)
+        End Try
+
+    End Sub
+
+
+End Class
